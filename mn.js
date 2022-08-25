@@ -3,8 +3,20 @@ const bw = 100
 const bh = 20
 const userStart = [230,10]
 const ballStart = [270,40]
+const ballDiameter =20
+const boardWidth = 560
+const boardHeight = 300
+const scoreDisplay = document.querySelector("#score")
+let score = 0
 let currentPos = userStart
 let ballPos = ballStart
+let timerId 
+
+let xDirection = 2
+let yDirection = 2
+
+
+
 class Block{
     constructor(x,y){
         this.bottomLeft=[x,y]
@@ -42,6 +54,7 @@ function addBlocks(){
         grid.appendChild(block)}
 
     }
+addBlocks()
 const user = document.createElement("div")
 user.classList.add("user")
 function drawUser(){
@@ -74,11 +87,67 @@ function moveUser(e){
 
 document.addEventListener("keydown",moveUser)
 
-const ball = document.createEvent("div")
+const ball = document.createElement("div")
 ball.classList.add("ball")
-drawBall()
+
 grid.appendChild(ball)
 function moveBall(){
-    ballPos[0]
-    ballPos[0]
+    ballPos[0]+=xDirection
+    ballPos[1]+=yDirection
+
+    drawBall()
+    collisionCheck()
+}
+timerId = setInterval(moveBall,30)
+
+function collisionCheck(){
+    for (let i = 0; i<blocks.length; i++){
+        if
+    (
+      (ballPos[0] > blocks[i].bottomLeft[0] && ballPos[0] < blocks[i].bottomRight[0]) &&
+      ((ballPos[1] + ballDiameter) > blocks[i].bottomLeft[1] && ballPos[1] < blocks[i].topLeft[1]) 
+    ){
+            const allBlocks = Array.from(document.querySelectorAll(".block"))
+            allBlocks[i].classList.remove("block")
+            blocks.splice(i,1)
+            changeDirection()
+            score++
+            scoreDisplay.innerHTML=score
+            if (blocks.lenght === 0){
+                scoreDisplay.innerHTML= "WIN"
+                clearInterval(timerId)
+                document.removeEventListener("keydown")
+            }
+        }
+    }
+    if (ballPos[0] >= (boardWidth-ballDiameter)||
+        ballPos[1] >= (boardHeight-ballDiameter)||
+        ballPos[0] <= 0
+    )
+    {
+        changeDirection()
+    }
+    if ((ballPos[0]>currentPos[0] && ballPos[0] < currentPos[0] + bw ) &&
+    (ballPos[1] > currentPos[1] && ballPos[1] < currentPos[1]+bh))
+    if
+    (
+      (ballPos[0] > currentPos[0] && ballPos[0] < currentPos[0] + bw) &&
+      (ballPos[1] > currentPos[1] && ballPos[1] < currentPos[1] + bh ) 
+    )
+    {
+        changeDirection()
+    }
+    if (ballPos[1] <= 0) {
+        clearInterval(timerId)
+        scoreDisplay.innerHTML = 'You lose!'
+        document.removeEventListener('keydown', moveUser)
+      }
+
+}
+
+function changeDirection(){
+    xDirection = -xDirection-Math.random()
+    yDirection = -yDirection-Math.random()
+
+
 }
